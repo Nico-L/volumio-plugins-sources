@@ -89,10 +89,10 @@ boutonsbox.prototype.getUIConfig = function() {
 			self.logger.info('boutonsBox: action', action, c1, c2);
 			// accessor supposes actions and uiconfig items are in SAME order
 			// this is potentially dangerous: rewrite with a JSON search of "id" value ?				
-			uiconf.sections[0].content[2*i].value = self.config.get(c1);
+			/*uiconf.sections[0].content[2*i].value = self.config.get(c1);
 			uiconf.sections[0].content[2*i+1].value.value = self.config.get(c2);
 			uiconf.sections[0].content[2*i+1].value.label = self.config.get(c2).toString();
-
+*/
 			i = i + 1;
 		});
 		self.logger.info('boutonsBox: Getting UI config done');
