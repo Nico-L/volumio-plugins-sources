@@ -155,7 +155,7 @@ boutonsbox.prototype.createTriggers = function() {
 	var self = this;
 
 	self.logger.info('boutonsbox: Reading config and creating triggers...');
-	self.logger.info('createTriggers:', self.triggers);
+	self.logger.info('createTriggers:', actions);
 	actions.forEach(function(action, index, array) {
 		var c1 = action.concat('.enabled');
 		var c2 = action.concat('.pin');
