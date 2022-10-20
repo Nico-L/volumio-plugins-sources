@@ -11,11 +11,11 @@ module.exports = boutonsbox;
 
 function boutonsbox(context) {
 	var self = this;
-	self.logger.info('boutonsbox context:', context);
 	self.context=context;
 	self.commandRouter = self.context.coreCommand;
 	self.logger = self.context.logger;
 	self.triggers = [];
+	self.logger.info('boutonsbox context:', context);
 }
 
 boutonsbox.prototype.onVolumioStart = function()
