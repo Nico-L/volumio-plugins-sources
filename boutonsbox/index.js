@@ -7,6 +7,10 @@ var io = require('socket.io-client');
 var socket = io.connect('http://localhost:3000');
 var actions = ["playPause", "volumeUp", "volumeDown", "previous", "next", "shutdown", "playlist1", "playlist2", "playlist3"];
 
+socket.on('message', function(data){
+    console.log(data);
+});
+
 module.exports = boutonsbox;
 
 function boutonsbox(context) {
@@ -257,17 +261,17 @@ boutonsbox.prototype.shutdown = function() {
 //playlist1
 boutonsbox.prototype.playlist1 = function() {
 	this.logger.info('boutonsbox: playlist 1\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
   };
 
   //playlist1
 boutonsbox.prototype.playlist2 = function() {
 	this.logger.info('boutonsbox: playlist 2\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
   };
 
   //playlist1
 boutonsbox.prototype.playlist3 = function() {
 	this.logger.info('boutonsbox: playlist 3\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
   };
