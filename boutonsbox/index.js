@@ -90,7 +90,6 @@ boutonsbox.prototype.getUIConfig = function() {
 			__dirname + '/UIConfig.json')
 	.then(function(uiconf)
 	{
-		self.logger.info('boutonsBox: uiconf', uiconf);
 		var i = 0;
 		actions.forEach(function(action, index, array) {
 			
@@ -106,7 +105,7 @@ boutonsbox.prototype.getUIConfig = function() {
 
 			i = i + 1;
 		});
-
+		self.logger.info('boutonsBox: Getting UI config done');
 		defer.resolve(uiconf);
 	})
 	.fail(function()
@@ -175,7 +174,7 @@ boutonsbox.prototype.createTriggers = function() {
 		var pin = self.config.get(c2);
 
 		if(enabled === true){
-			self.logger.info('GPIO-Buttons: '+ action + ' on pin ' + pin);
+			self.logger.info('boutonsbox: '+ action + ' on pin ' + pin);
 			var j = new Gpio(pin,'in','both');
 			j.watch(self.listener.bind(self,action));
 			self.triggers.push(j);
