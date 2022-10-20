@@ -10,12 +10,12 @@ var actions = ["shutdown"];
 module.exports = boutonsbox;
 
 function boutonsbox(context) {
-	self.logger.info('boutonsbox context:', context);
 	var self = this;
 	self.context=context;
 	self.commandRouter = self.context.coreCommand;
 	self.logger = self.context.logger;
 	self.triggers = [];
+	self.logger.info('boutonsbox context:', context);
 }
 
 boutonsbox.prototype.onVolumioStart = function()

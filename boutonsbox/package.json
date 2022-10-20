@@ -31,7 +31,7 @@
 	"dependencies": {
 		"fs-extra": "^0.28.0",
 		"kew": "^0.7.0",
-		"v-conf": "^1.4.0", 
+		"v-conf": "^1.4.0",
 		"socket.io-client": "^4.5.3",
 		"onoff": "^6.0.3"
 	}
