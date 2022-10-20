@@ -90,7 +90,7 @@ boutonsbox.prototype.getUIConfig = function() {
 			__dirname + '/UIConfig.json')
 	.then(function(uiconf)
 	{
-		var i = 0;
+		/*var i = 0;
 		actions.forEach(function(action, index, array) {
 			
 			// Strings for config
@@ -104,7 +104,7 @@ boutonsbox.prototype.getUIConfig = function() {
 			uiconf.sections[0].content[2*i+1].value.label = self.config.get(c2).toString();
 
 			i = i + 1;
-		});
+		}); */
 		self.logger.info('boutonsBox: Getting UI config done');
 		defer.resolve(uiconf);
 	})
