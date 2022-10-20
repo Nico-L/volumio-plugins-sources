@@ -207,6 +207,6 @@ boutonsbox.prototype.listener = function(action,err,value){
 
 //shutdown
 boutonsbox.prototype.shutdown = function() {
-	// this.logger.info('GPIO-Buttons: shutdown button pressed\n');
+	this.logger.info('boutonsbox: shutdown button pressed\n');
 	this.commandRouter.shutdown();
   };
