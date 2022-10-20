@@ -5,7 +5,7 @@ var fs=require('fs-extra');
 var Gpio = require('onoff').Gpio;
 var io = require('socket.io-client');
 var socket = io.connect('http://localhost:3000');
-var actions = ["shutdown"];
+var actions = ["playPause", "volumeUp", "volumeDown", "previous", "next", "shutdown"];
 
 module.exports = boutonsbox;
 
@@ -204,6 +204,48 @@ boutonsbox.prototype.listener = function(action,err,value){
 	// remember value
 	self.config.set(c3,value);
 };
+
+//actions
+
+//Play / Pause
+boutonsbox.prototype.playPause = function() {
+	//this.logger.info('GPIO-Buttons: Play/pause button pressed');
+	socket.emit('getState','');
+	socket.once('pushState', function (state) {
+	  if(state.status=='play' && state.service=='webradio'){
+		socket.emit('stop');
+	  } else if(state.status=='play'){
+		socket.emit('pause');
+	  } else {
+		socket.emit('play');
+	  }
+	});
+  };
+  
+  //next on playlist
+  boutonsbox.prototype.next = function() {
+	//this.logger.info('GPIO-Buttons: next-button pressed');
+	socket.emit('next')
+  };
+  
+  //previous on playlist
+  boutonsbox.prototype.previous = function() {
+	//this.logger.info('GPIO-Buttons: previous-button pressed');
+	socket.emit('prev')
+  };
+  
+  //Volume up
+  boutonsbox.prototype.volumeUp = function() {
+	//this.logger.info('GPIO-Buttons: Vol+ button pressed');
+	socket.emit('volume','+');
+  };
+  
+  //Volume down
+  boutonsbox.prototype.volumeDown = function() {
+	//this.logger.info('GPIO-Buttons: Vol- button pressed\n');
+	socket.emit('volume','-');
+  };
+  
 
 //shutdown
 boutonsbox.prototype.shutdown = function() {
