@@ -80,6 +80,7 @@ boutonsbox.prototype.getUIConfig = function() {
 	.then(function(uiconf)
 	{
 		var i = 0;
+		self.logger.info('boutonsBox: actions', actions);
 		/*actions.forEach(function(action, index, array) {
 			
 			// Strings for config
