@@ -29,8 +29,6 @@ function boutonsbox(context) {
 
 }
 
-
-
 boutonsbox.prototype.onVolumioStart = function()
 {
 	var self = this;
@@ -163,166 +161,63 @@ boutonsbox.prototype.saveConfig = function(data)
 	self.commandRouter.pushToastMessage('success',"boutonsBox", "Configuration saved");
 };
 
-
-// Playback Controls ---------------------------------------------------------------------------------------
-// If your plugin is not a music_sevice don't use this part and delete it
-
-
-boutonsbox.prototype.addToBrowseSources = function () {
-
-	// Use this function to add your music service plugin to music sources
-    //var data = {name: 'Spotify', uri: 'spotify',plugin_type:'music_service',plugin_name:'spop'};
-    this.commandRouter.volumioAddToBrowseSources(data);
-};
-
-boutonsbox.prototype.handleBrowseUri = function (curUri) {
-    var self = this;
-
-    //self.commandRouter.logger.info(curUri);
-    var response;
-
-
-    return response;
-};
-
-
-
-// Define a method to clear, add, and play an array of tracks
-boutonsbox.prototype.clearAddPlayTrack = function(track) {
+//creating triggers 
+boutonsbox.prototype.createTriggers = function() {
 	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::clearAddPlayTrack');
 
-	self.commandRouter.logger.info(JSON.stringify(track));
+	self.logger.info('boutonsbox: Reading config and creating triggers...');
 
-	return self.sendSpopCommand('uplay', [track.uri]);
+	actions.forEach(function(action, index, array) {
+		var c1 = action.concat('.enabled');
+		var c2 = action.concat('.pin');
+
+		var enabled = self.config.get(c1);
+		var pin = self.config.get(c2);
+
+		if(enabled === true){
+			self.logger.info('GPIO-Buttons: '+ action + ' on pin ' + pin);
+			var j = new Gpio(pin,'in','both');
+			j.watch(self.listener.bind(self,action));
+			self.triggers.push(j);
+		}
+	});
+		
+	return libQ.resolve();
 };
 
-boutonsbox.prototype.seek = function (timepos) {
-    this.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::seek to ' + timepos);
-
-    return this.sendSpopCommand('seek '+timepos, []);
-};
-
-// Stop
-boutonsbox.prototype.stop = function() {
+boutonsbox.prototype.clearTriggers = function () {
 	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::stop');
+	
+	self.triggers.forEach(function(trigger, index, array) {
+  		self.logger.info("GPIO-Buttons: Destroying trigger " + index);
 
+		trigger.unwatchAll();
+		trigger.unexport();		
+	});
+	
+	self.triggers = [];
 
+	return libQ.resolve();	
 };
 
-// Spop pause
-boutonsbox.prototype.pause = function() {
+
+boutonsbox.prototype.listener = function(action,err,value){
 	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::pause');
 
+	var c3 = action.concat('.value');
+	var lastvalue = self.config.get(c3);
 
-};
-
-// Get state
-boutonsbox.prototype.getState = function() {
-	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::getState');
-
-
-};
-
-//Parse state
-boutonsbox.prototype.parseState = function(sState) {
-	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::parseState');
-
-	//Use this method to parse the state and eventually send it with the following function
-};
-
-// Announce updated State
-boutonsbox.prototype.pushState = function(state) {
-	var self = this;
-	self.commandRouter.pushConsoleMessage('[' + Date.now() + '] ' + 'boutonsbox::pushState');
-
-	return self.commandRouter.servicePushState(state, self.servicename);
-};
-
-
-boutonsbox.prototype.explodeUri = function(uri) {
-	var self = this;
-	var defer=libQ.defer();
-
-	// Mandatory: retrieve all info for a given URI
-
-	return defer.promise;
-};
-
-boutonsbox.prototype.getAlbumArt = function (data, path) {
-
-	var artist, album;
-
-	if (data != undefined && data.path != undefined) {
-		path = data.path;
+	// IF change AND high (or low?)
+	if(value !== lastvalue && value === 1){
+		//do thing
+		self[action]();
 	}
-
-	var web;
-
-	if (data != undefined && data.artist != undefined) {
-		artist = data.artist;
-		if (data.album != undefined)
-			album = data.album;
-		else album = data.artist;
-
-		web = '?web=' + nodetools.urlEncode(artist) + '/' + nodetools.urlEncode(album) + '/large'
-	}
-
-	var url = '/albumart';
-
-	if (web != undefined)
-		url = url + web;
-
-	if (web != undefined && path != undefined)
-		url = url + '&';
-	else if (path != undefined)
-		url = url + '?';
-
-	if (path != undefined)
-		url = url + 'path=' + nodetools.urlEncode(path);
-
-	return url;
+	// remember value
+	self.config.set(c3,value);
 };
 
-
-
-
-
-boutonsbox.prototype.search = function (query) {
-	var self=this;
-	var defer=libQ.defer();
-
-	// Mandatory, search. You can divide the search in sections using following functions
-
-	return defer.promise;
-};
-
-boutonsbox.prototype._searchArtists = function (results) {
-
-};
-
-boutonsbox.prototype._searchAlbums = function (results) {
-
-};
-
-boutonsbox.prototype._searchPlaylists = function (results) {
-
-
-};
-
-boutonsbox.prototype._searchTracks = function (results) {
-
-};
-
-boutonsbox.prototype.goto=function(data){
-    var self=this
-    var defer=libQ.defer()
-
-// Handle go to artist and go to album function
-
-     return defer.promise;
-};
+//shutdown
+boutonsbox.prototype.shutdown = function() {
+	// this.logger.info('GPIO-Buttons: shutdown button pressed\n');
+	this.commandRouter.shutdown();
+  };
