@@ -15,7 +15,7 @@ function boutonsbox(context) {
 	self.commandRouter = self.context.coreCommand;
 	self.logger = self.context.logger;
 	self.triggers = [];
-	self.logger.info('boutonsbox context:', context);
+	//self.logger.info('boutonsbox context:', context);
 }
 
 boutonsbox.prototype.onVolumioStart = function()
@@ -178,7 +178,7 @@ boutonsbox.prototype.clearTriggers = function () {
 	var self = this;
 	self.logger.info('clearTriggers:', self.triggers);
 	self.triggers.forEach(function(trigger, index, array) {
-  		self.logger.info("GPIO-Buttons: Destroying trigger " + index);
+  		self.logger.info("boutonsbox: Destroying trigger " + index);
 
 		trigger.unwatchAll();
 		trigger.unexport();		
@@ -209,7 +209,7 @@ boutonsbox.prototype.listener = function(action,err,value){
 
 //Play / Pause
 boutonsbox.prototype.playPause = function() {
-	//this.logger.info('GPIO-Buttons: Play/pause button pressed');
+	//this.logger.info('boutonsbox: Play/pause button pressed');
 	socket.emit('getState','');
 	socket.once('pushState', function (state) {
 	  if(state.status=='play' && state.service=='webradio'){
@@ -224,26 +224,26 @@ boutonsbox.prototype.playPause = function() {
   
   //next on playlist
   boutonsbox.prototype.next = function() {
-	//this.logger.info('GPIO-Buttons: next-button pressed');
-	socket.emit('next')
+	this.logger.info('boutonsbox: next-button pressed');
+	//socket.emit('next')
   };
   
   //previous on playlist
   boutonsbox.prototype.previous = function() {
-	//this.logger.info('GPIO-Buttons: previous-button pressed');
-	socket.emit('prev')
+	this.logger.info('boutonsbox: previous-button pressed');
+	//socket.emit('prev')
   };
   
   //Volume up
   boutonsbox.prototype.volumeUp = function() {
-	//this.logger.info('GPIO-Buttons: Vol+ button pressed');
-	socket.emit('volume','+');
+	this.logger.info('boutonsbox: Vol+ button pressed');
+	//socket.emit('volume','+');
   };
   
   //Volume down
   boutonsbox.prototype.volumeDown = function() {
-	//this.logger.info('GPIO-Buttons: Vol- button pressed\n');
-	socket.emit('volume','-');
+	this.logger.info('boutonsbox: Vol- button pressed\n');
+	//socket.emit('volume','-');
   };
   
 
