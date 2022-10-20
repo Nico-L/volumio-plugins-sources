@@ -257,17 +257,17 @@ boutonsbox.prototype.shutdown = function() {
 //playlist1
 boutonsbox.prototype.playlist1 = function() {
 	this.logger.info('boutonsbox: playlist 1\n');
-	//this.commandRouter.shutdown();
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
   };
 
   //playlist1
 boutonsbox.prototype.playlist2 = function() {
 	this.logger.info('boutonsbox: playlist 2\n');
-	//this.commandRouter.shutdown();
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
   };
 
   //playlist1
 boutonsbox.prototype.playlist3 = function() {
 	this.logger.info('boutonsbox: playlist 3\n');
-	//this.commandRouter.shutdown();
+	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:album:50GNC1xTGkqwWnRjhcnNW1"});
   };
