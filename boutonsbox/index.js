@@ -10,8 +10,8 @@ var actions = ["shutdown"];
 module.exports = boutonsbox;
 
 function boutonsbox(context) {
-	self.logger.info('boutonsbox context:', context);
 	var self = this;
+	self.logger.info('boutonsbox context:', context);
 	self.context=context;
 	self.commandRouter = self.context.coreCommand;
 	self.logger = self.context.logger;
