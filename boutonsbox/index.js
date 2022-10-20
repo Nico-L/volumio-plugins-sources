@@ -139,7 +139,7 @@ boutonsbox.prototype.saveConfig = function(data)
 {
 	var self = this;
 	self.logger.info('saveConfig:', actions);
-	self.logger.info('saveConfig data:', data);
+	
 	actions.forEach(function(action, index, array) {
  		// Strings for data fields
 		var s1 = action.concat('Enabled');
@@ -154,7 +154,7 @@ boutonsbox.prototype.saveConfig = function(data)
 		self.config.set(c2, data[s2]['value']);
 		self.config.set(c3, 0);
 	});
-
+	self.logger.info('saveConfig done');
 	self.clearTriggers()
 		.then(self.createTriggers());
 
@@ -166,7 +166,7 @@ boutonsbox.prototype.createTriggers = function() {
 	var self = this;
 
 	self.logger.info('boutonsbox: Reading config and creating triggers...');
-
+	self.logger.info('createTriggers:', self.triggers);
 	actions.forEach(function(action, index, array) {
 		var c1 = action.concat('.enabled');
 		var c2 = action.concat('.pin');
@@ -187,7 +187,7 @@ boutonsbox.prototype.createTriggers = function() {
 
 boutonsbox.prototype.clearTriggers = function () {
 	var self = this;
-	
+	self.logger.info('clearTriggers:', self.triggers);
 	self.triggers.forEach(function(trigger, index, array) {
   		self.logger.info("GPIO-Buttons: Destroying trigger " + index);
 
