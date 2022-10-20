@@ -25,7 +25,7 @@ boutonsbox.prototype.onVolumioStart = function()
 	this.config = new (require('v-conf'))();
 	this.config.loadFile(configFile);
 
-	self.logger.info("boutonsBox initialized")
+	self.logger.info("boutonsBox initialized", this.config)
 
     return libQ.resolve();
 }
@@ -86,7 +86,7 @@ boutonsbox.prototype.getUIConfig = function() {
 			// Strings for config
 			var c1 = action.concat('.enabled');
 			var c2 = action.concat('.pin');
-			self.logger.info('boutonsBox: action', action, c1, c2);
+			self.logger.info('boutonsBox: self.config', self.config);
 			// accessor supposes actions and uiconfig items are in SAME order
 			// this is potentially dangerous: rewrite with a JSON search of "id" value ?				
 			/*uiconf.sections[0].content[2*i].value = self.config.get(c1);
