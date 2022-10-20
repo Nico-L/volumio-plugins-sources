@@ -80,13 +80,13 @@ boutonsbox.prototype.getUIConfig = function() {
 	.then(function(uiconf)
 	{
 		var i = 0;
-		self.logger.info('boutonsBox: actions', actions);
-		/*actions.forEach(function(action, index, array) {
+		
+		actions.forEach(function(action, index, array) {
 			
 			// Strings for config
 			var c1 = action.concat('.enabled');
 			var c2 = action.concat('.pin');
-			
+			self.logger.info('boutonsBox: action', action, c1, c2);
 			// accessor supposes actions and uiconfig items are in SAME order
 			// this is potentially dangerous: rewrite with a JSON search of "id" value ?				
 			uiconf.sections[0].content[2*i].value = self.config.get(c1);
@@ -94,7 +94,7 @@ boutonsbox.prototype.getUIConfig = function() {
 			uiconf.sections[0].content[2*i+1].value.label = self.config.get(c2).toString();
 
 			i = i + 1;
-		}); */
+		});
 		self.logger.info('boutonsBox: Getting UI config done');
 		defer.resolve(uiconf);
 	})
