@@ -138,7 +138,8 @@ boutonsbox.prototype.setConf = function(varName, varValue) {
 boutonsbox.prototype.saveConfig = function(data)
 {
 	var self = this;
-
+	self.logger.info('saveConfig:', actions);
+	self.logger.info('saveConfig data:', data);
 	actions.forEach(function(action, index, array) {
  		// Strings for data fields
 		var s1 = action.concat('Enabled');
