@@ -18,18 +18,6 @@ function boutonsbox(context) {
 	self.triggers = [];
 }
 
-
-module.exports = boutonsbox;
-function boutonsbox(context) {
-	var self = this;
-
-	this.context = context;
-	this.commandRouter = this.context.coreCommand;
-	this.logger = this.context.logger;
-	this.configManager = this.context.configManager;
-
-}
-
 boutonsbox.prototype.onVolumioStart = function()
 {
 	var self = this;
