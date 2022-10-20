@@ -5,7 +5,7 @@ var fs=require('fs-extra');
 var Gpio = require('onoff').Gpio;
 var io = require('socket.io-client');
 var socket = io.connect('http://localhost:3000');
-var actions = ["playPause", "volumeUp", "volumeDown", "previous", "next", "shutdown"];
+var actions = ["playPause", "volumeUp", "volumeDown", "previous", "next", "shutdown", "playlist1"];
 
 module.exports = boutonsbox;
 
@@ -252,4 +252,10 @@ boutonsbox.prototype.playPause = function() {
 boutonsbox.prototype.shutdown = function() {
 	this.logger.info('boutonsbox: shutdown button pressed\n');
 	this.commandRouter.shutdown();
+  };
+
+//playlist1
+boutonsbox.prototype.playlist1 = function() {
+	this.logger.info('boutonsbox: playlist 1\n');
+	//this.commandRouter.shutdown();
   };

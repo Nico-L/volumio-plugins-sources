@@ -28,5 +28,10 @@
     "enabled": {"value": true, "type": "boolean"},
     "pin": {"value": 17,"type":"number"},
     "value": {"value": 0, "type": "number"}
+  },
+  "playlist1":{
+    "enabled": {"value": true, "type": "boolean"},
+    "pin": {"value": 7,"type":"number"},
+    "value": {"value": 0, "type": "number"}
   }
 }
