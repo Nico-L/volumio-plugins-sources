@@ -2,9 +2,20 @@
 
 var libQ = require('kew');
 var fs=require('fs-extra');
-var config = new (require('v-conf'))();
-var exec = require('child_process').exec;
-var execSync = require('child_process').execSync;
+var Gpio = require('onoff').Gpio;
+var io = require('socket.io-client');
+var socket = io.connect('http://localhost:3000');
+var actions = ["shutdown"];
+
+module.exports = boutonsbox;
+
+function boutonsbox(context) {
+	var self = this;
+	self.context=context;
+	self.commandRouter = self.context.coreCommand;
+	self.logger = self.context.logger;
+	self.triggers = [];
+}
 
 
 module.exports = boutonsbox;
@@ -27,6 +38,8 @@ boutonsbox.prototype.onVolumioStart = function()
 	this.config = new (require('v-conf'))();
 	this.config.loadFile(configFile);
 
+	self.logger.info("boutonsBox initialized")
+
     return libQ.resolve();
 }
 
@@ -35,8 +48,11 @@ boutonsbox.prototype.onStart = function() {
 	var defer=libQ.defer();
 
 
-	// Once the Plugin has successfull started resolve the promise
-	defer.resolve();
+	self.createTriggers()
+		.then (function (result) {
+			self.logger.info("boutonsBox started");
+			defer.resolve();
+		});
 
     return defer.promise;
 };
@@ -45,8 +61,11 @@ boutonsbox.prototype.onStop = function() {
     var self = this;
     var defer=libQ.defer();
 
-    // Once the Plugin has successfull stopped resolve the promise
-    defer.resolve();
+    self.clearTriggers()
+		.then (function (result) {
+			self.logger.info("boutonsBox stopped");
+			defer.resolve();
+		});
 
     return libQ.resolve();
 };
@@ -60,26 +79,44 @@ boutonsbox.prototype.onRestart = function() {
 // Configuration Methods -----------------------------------------------------------------------------
 
 boutonsbox.prototype.getUIConfig = function() {
-    var defer = libQ.defer();
-    var self = this;
+	var defer = libQ.defer();
+	var self = this;
 
-    var lang_code = this.commandRouter.sharedVars.get('language_code');
+	self.logger.info('boutonsBox: Getting UI config');
 
-    self.commandRouter.i18nJson(__dirname+'/i18n/strings_'+lang_code+'.json',
-        __dirname+'/i18n/strings_en.json',
-        __dirname + '/UIConfig.json')
-        .then(function(uiconf)
-        {
+	//Just for now..
+	var lang_code = 'en';
 
+	self.commandRouter.i18nJson(__dirname+'/i18n/strings_'+lang_code+'.json',
+			__dirname+'/i18n/strings_en.json',
+			__dirname + '/UIConfig.json')
+	.then(function(uiconf)
+	{
+		self.logger.info('boutonsBox: uiconf', uiconf);
+		var i = 0;
+		actions.forEach(function(action, index, array) {
+			
+			// Strings for config
+			var c1 = action.concat('.enabled');
+			var c2 = action.concat('.pin');
+			
+			// accessor supposes actions and uiconfig items are in SAME order
+			// this is potentially dangerous: rewrite with a JSON search of "id" value ?				
+			uiconf.sections[0].content[2*i].value = self.config.get(c1);
+			uiconf.sections[0].content[2*i+1].value.value = self.config.get(c2);
+			uiconf.sections[0].content[2*i+1].value.label = self.config.get(c2).toString();
 
-            defer.resolve(uiconf);
-        })
-        .fail(function()
-        {
-            defer.reject(new Error());
-        });
+			i = i + 1;
+		});
 
-    return defer.promise;
+		defer.resolve(uiconf);
+	})
+	.fail(function()
+	{
+		defer.reject(new Error());
+	});
+
+	return defer.promise;
 };
 
 boutonsbox.prototype.getConfigurationFiles = function() {
@@ -101,6 +138,30 @@ boutonsbox.prototype.setConf = function(varName, varValue) {
 	//Perform your installation tasks here
 };
 
+boutonsbox.prototype.saveConfig = function(data)
+{
+	var self = this;
+
+	actions.forEach(function(action, index, array) {
+ 		// Strings for data fields
+		var s1 = action.concat('Enabled');
+		var s2 = action.concat('Pin');
+
+		// Strings for config
+		var c1 = action.concat('.enabled');
+		var c2 = action.concat('.pin');
+		var c3 = action.concat('.value');
+
+		self.config.set(c1, data[s1]);
+		self.config.set(c2, data[s2]['value']);
+		self.config.set(c3, 0);
+	});
+
+	self.clearTriggers()
+		.then(self.createTriggers());
+
+	self.commandRouter.pushToastMessage('success',"boutonsBox", "Configuration saved");
+};
 
 
 // Playback Controls ---------------------------------------------------------------------------------------

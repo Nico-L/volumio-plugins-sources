@@ -1,3 +1,7 @@
 {
- 
-}
+    "shutdown":{
+      "enabled": {"value": false, "type": "boolean"},
+      "pin": {"value": 3,"type":"number"},
+      "value": {"value": 0, "type": "number"}
+    }
+  }
