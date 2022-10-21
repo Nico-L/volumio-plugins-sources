@@ -5,6 +5,7 @@ var fs=require('fs-extra');
 var Gpio = require('onoff').Gpio;
 var io = require('socket.io-client');
 var socket = io.connect('http://localhost:3000');
+var fetch = require('node-fetch')
 var actions = ["playPause", "volumeUp", "volumeDown", "previous", "next", "shutdown", "playlist1", "playlist2", "playlist3"];
 
 socket.on('message', function(data){
@@ -197,7 +198,7 @@ boutonsbox.prototype.clearTriggers = function () {
 
 boutonsbox.prototype.listener = function(action,err,value){
 	var self = this;
-
+	this.logger.info('listener ${action} et ${value}');
 	var c3 = action.concat('.value');
 	var lastvalue = self.config.get(c3);
 
@@ -271,7 +272,14 @@ boutonsbox.prototype.playlist2 = function() {
   };
 
   //playlist1
-boutonsbox.prototype.playlist3 = function() {
+boutonsbox.prototype.playlist3 = async function() {
 	this.logger.info('boutonsbox: playlist 3\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
-  };
+	//socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
+	const response = await fetch('http://127.0.0.1:3000/api/v1/replaceAndPlay', {
+		method: 'post',
+		body: JSON.stringify({"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"}),
+		headers: {'Content-Type': 'application/json'}
+	});
+	const data = await response.json();
+	this.logger.info('boutonsbox: playlist 3: ${data}\n')
+};
