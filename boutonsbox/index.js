@@ -215,7 +215,7 @@ boutonsbox.prototype.listener = function(action,err,value){
 
 //Play / Pause
 boutonsbox.prototype.playPause = function() {
-	//this.logger.info('boutonsbox: Play/pause button pressed');
+	this.logger.info('boutonsbox: Play/pause button pressed');
 	socket.emit('getState','');
 	socket.once('pushState', function (state) {
 	  if(state.status=='play' && state.service=='webradio'){
@@ -231,25 +231,25 @@ boutonsbox.prototype.playPause = function() {
   //next on playlist
   boutonsbox.prototype.next = function() {
 	this.logger.info('boutonsbox: next-button pressed');
-	//socket.emit('next')
+	socket.emit('next')
   };
   
   //previous on playlist
   boutonsbox.prototype.previous = function() {
 	this.logger.info('boutonsbox: previous-button pressed');
-	//socket.emit('prev')
+	socket.emit('prev')
   };
   
   //Volume up
   boutonsbox.prototype.volumeUp = function() {
 	this.logger.info('boutonsbox: Vol+ button pressed');
-	//socket.emit('volume','+');
+	socket.emit('volume','+');
   };
   
   //Volume down
   boutonsbox.prototype.volumeDown = function() {
 	this.logger.info('boutonsbox: Vol- button pressed\n');
-	//socket.emit('volume','-');
+	socket.emit('volume','-');
   };
   
 
