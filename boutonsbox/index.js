@@ -260,26 +260,37 @@ boutonsbox.prototype.shutdown = function() {
   };
 
 //playlist1
-boutonsbox.prototype.playlist1 = function() {
+boutonsbox.prototype.playlist1 = async function() {
 	this.logger.info('boutonsbox: playlist 1\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
+	await fetch('http://127.0.0.1:3000/api/v1/replaceAndPlay', {
+		method: 'post',
+		body: JSON.stringify({"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:610WjPfbeUDb44IaUl1ZJe"}),
+		headers: {'Content-Type': 'application/json'}
+	});
+	this.logger.info('boutonsbox: playlist 2 launched\n')
+	//socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:610WjPfbeUDb44IaUl1ZJe"});
   };
 
   //playlist1
-boutonsbox.prototype.playlist2 = function() {
+boutonsbox.prototype.playlist2 = async function() {
 	this.logger.info('boutonsbox: playlist 2\n');
-	socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
+	//socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:78Dh5lVQXWCE2iRd37wDoy"});
+	await fetch('http://127.0.0.1:3000/api/v1/replaceAndPlay', {
+		method: 'post',
+		body: JSON.stringify({"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:78Dh5lVQXWCE2iRd37wDoy"}),
+		headers: {'Content-Type': 'application/json'}
+	});
+	this.logger.info('boutonsbox: playlist 2 launched\n')
   };
 
   //playlist1
 boutonsbox.prototype.playlist3 = async function() {
 	this.logger.info('boutonsbox: playlist 3\n');
 	//socket.emit('replaceAndPlay', {"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"});
-	const response = await fetch('http://127.0.0.1:3000/api/v1/replaceAndPlay', {
+	await fetch('http://127.0.0.1:3000/api/v1/replaceAndPlay', {
 		method: 'post',
 		body: JSON.stringify({"name": "Spotify", "service": "spop", "uri": "spotify:user:spotify:playlist:50GNC1xTGkqwWnRjhcnNW1"}),
 		headers: {'Content-Type': 'application/json'}
 	});
-	const data = await response.json();
-	this.logger.info('boutonsbox: playlist 3: ${data}\n')
+	this.logger.info('boutonsbox: playlist 3 launched\n')
 };
