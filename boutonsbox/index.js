@@ -229,15 +229,25 @@ boutonsbox.prototype.playPause = function() {
   };
   
   //next on playlist
-  boutonsbox.prototype.next = function() {
+  boutonsbox.prototype.next = async function() {
 	this.logger.info('boutonsbox: next-button pressed');
-	socket.emit('next')
+	await fetch('http://127.0.0.1:3000/api/v1/commands/?cmd=next', {
+		method: 'post',
+
+		headers: {'Content-Type': 'application/json'}
+	});
+	//socket.emit('next')
   };
   
   //previous on playlist
-  boutonsbox.prototype.previous = function() {
+  boutonsbox.prototype.previous = async function() {
 	this.logger.info('boutonsbox: previous-button pressed');
-	socket.emit('prev')
+	await fetch('http://127.0.0.1:3000/api/v1/commands/?cmd=prev', {
+		method: 'post',
+
+		headers: {'Content-Type': 'application/json'}
+	});
+	//socket.emit('prev')
   };
   
   //Volume up
